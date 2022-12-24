@@ -41,15 +41,15 @@ function App() {
 
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
-  const history = useNavigate();
+  const navigate = useNavigate();
 
   const handleDelete = (id) => {
     console.log(`Deleting post ${id}`);
     const postList = posts.filter(post => post.id !== id)
     console.log(postList);
     setPosts(postList);
-    // return postList;
-    history.push('/');
+    // Return to home page after deleting post
+    navigate('/');
   }
 
   return (
