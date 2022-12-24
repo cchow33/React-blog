@@ -16,7 +16,7 @@ function App() {
   const [posts, setPosts] = useState([
     {
       id: 1,
-      title: "My First Post",
+      title: "My 1st Post",
       datetime: "July 01, 2021 11:17:36 AM",
       body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis consequatur expedita, assumenda similique non optio! Modi nesciunt excepturi corrupti atque blanditiis quo nobis, non optio quae possimus illum exercitationem ipsa!"
     },
@@ -34,7 +34,7 @@ function App() {
     },
     {
       id: 4,
-      title: "My Fourth Post",
+      title: "My 4th Post",
       datetime: "July 01, 2021 11:17:36 AM",
       body: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis consequatur expedita, assumenda similique non optio! Modi nesciunt excepturi corrupti atque blanditiis quo nobis, non optio quae possimus illum exercitationem ipsa!"
     }
@@ -45,6 +45,14 @@ function App() {
   const [postTitle, setPostTitle] = useState('');
   const [postBody, setPostBody] = useState('');
   const navigate = useNavigate();
+
+  // Search function using useEffect. Filter posts to match search input
+  useEffect(() => {
+    const filteredResults = posts.filter(post => 
+      ((post.body).toLowerCase()).includes(search.toLowerCase())
+      || ((post.title).toLowerCase()).includes(search.toLowerCase()));
+      setSearchResults(filteredResults.reverse()); //Show most recent results
+  }, [posts, search])
 
   // Submitting new posts and assign it an id. If this is the only post, it's id will be 1.
   const handleSubmit = (e) => {
@@ -81,7 +89,7 @@ function App() {
       <Routes>
       
         <Route path="/" element={
-          <Home posts={posts}
+          <Home posts={searchResults}
         />}/>
         
         <Route path="/post" element={
