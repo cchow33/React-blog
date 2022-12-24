@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
 
 * {
   margin: 0;
@@ -7,12 +7,12 @@
 }
 
 html {
-  font-size: 16px;
+  font-size: 14px;
 }
 
 body {
   min-height: 100vh;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   display: flex;
@@ -40,7 +40,7 @@ body {
 
 .Header, .Footer {
   width: 100%;
-  background-color: #66d8f5;
+  background-color: lightpink;
   padding: 1rem;
   display: flex;
   justify-content: space-between;
