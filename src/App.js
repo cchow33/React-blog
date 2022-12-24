@@ -1,6 +1,6 @@
 import logo from './logo.svg';
-import './App.css';
-import { Route, Routes, Link } from 'react-router-dom';
+import { Route, Routes, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
@@ -9,7 +9,7 @@ import PostPage from './components/PostPage';
 import About from './components/About';
 import Missing from './components/Missing';
 import Footer from './components/Footer';
-import { useState, useEffect } from 'react';
+import './App.css';
 
 function App() {
   const [posts, setPosts] = useState([
@@ -41,7 +41,16 @@ function App() {
 
   const [search, setSearch] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const history = useNavigate();
 
+  const handleDelete = (id) => {
+    console.log(`Deleting post ${id}`);
+    const postList = posts.filter(post => post.id !== id)
+    console.log(postList);
+    setPosts(postList);
+    // return postList;
+    history.push('/');
+  }
 
   return (
     <div className="App">
@@ -50,7 +59,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home posts={posts}/>}/>
         <Route path="/post" element={<NewPost />}/>
-        <Route path="/post/:id" element={<PostPage />} />
+        <Route path="/post/:id" element={<PostPage posts={posts} handleDelete={handleDelete} />} />
         <Route path="/about" element={<About/>} />
         <Route path="*" element={<Missing/>} />
       </Routes>
