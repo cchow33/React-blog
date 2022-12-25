@@ -7,6 +7,7 @@ import Header from './components/Header';
 import Navbar from './components/Navbar';
 import Home from './components/Home';
 import NewPost from './components/NewPost';
+import EditPost from './components/EditPost';
 import PostPage from './components/PostPage';
 import About from './components/About';
 import Missing from './components/Missing';
@@ -19,9 +20,11 @@ function App() {
   const [searchResults, setSearchResults] = useState([]);
   const [postTitle, setPostTitle] = useState('');
   const [postBody, setPostBody] = useState('');
+  const [editTitle, setEditTitle] = useState('');
+  const [editBody, setEditBody] = useState('');
   const navigate = useNavigate();
 
-  // 1. READ Async fetch function using axios to get data from api at load time
+  // (1) "READ" - Async fetch function using axios to get data from api at load time
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -41,7 +44,6 @@ function App() {
     }
   }
   fetchPosts();
-
 }, [])
 
   // Search function using useEffect. Filter posts to match search input
@@ -52,7 +54,8 @@ function App() {
       setSearchResults(filteredResults.reverse()); //Show most recent results
   }, [posts, search])
 
-  // 2. CREATE Submitting new posts and assign it an id. If this is the only post, it's id will be 1.
+
+  // (2) "CREATE" - Submitting new posts and assign it an id. If this is the only post, it's id will be 1.
   const handleSubmit = async (e) => {
     e.preventDefault();
     const id = posts.length ? posts[posts.length - 1].id + 1 : 1;
@@ -67,13 +70,30 @@ function App() {
       setPostTitle('');
       setPostBody('');
       navigate('/');
-  
     } catch (err) { 
       console.log(`Error: ${err.message}`);
     }
   }
 
-  // 3. DELETE - Deleting posts
+  // (3) "UPDATE" -
+  const handleEdit = async (id) => {
+    const datetime = format(new Date(), 'MMMM dd, yyyy pp');
+    const updatedPost = { id, title: editTitle, datetime, body: editBody};
+
+    try {
+      const response = await api.put(`/posts/${id}`, updatedPost); // put (entire data modified), patch (partical data)
+      setPosts(posts.map(post => post.id === id ? { ...response.data} : post)) // response.data is the new post information
+      setEditTitle('');
+      setEditBody('');
+      navigate('/');
+    
+    } catch (err) {
+      console.log(`Error: ${err.message}`);
+    }
+  }
+
+
+  // (4) "DELETE" - Deleting posts
   const handleDelete = async (id) => {
     try {
       await api.delete(`/posts/${id}`);
@@ -112,6 +132,16 @@ function App() {
             handleSubmit={handleSubmit}
         />}/>
         
+        <Route path="/edit/:id" element={
+          <EditPost 
+            posts={posts}
+            editBody={editBody}
+            editTitle={editTitle}
+            setEditBody={setEditBody}
+            setEditTitle={setEditTitle} 
+            handleEdit={handleEdit}
+        />}/>
+
         <Route path="/post/:id" element={
           <PostPage 
             posts={posts} 

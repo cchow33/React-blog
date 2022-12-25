@@ -215,6 +215,7 @@ body {
   background-color: black;
   color: #fff;
   cursor: pointer;
+  margin-right: 0.5rem;
 }
 
 .statusMsg {
